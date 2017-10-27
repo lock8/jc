@@ -1,0 +1,1 @@
+T 0x002 @ (001, 059) [ this\ttricky non \"empty\" string should be\nparsed \u2714 ]
