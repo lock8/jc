@@ -1,5 +1,7 @@
-SHELL := bash
-DIFF  := diff
+SHELL   := bash
+DIFF    := diff
+AFLCC   := afl-gcc
+AFLFUZZ := afl-fuzz
 
 BUILD_DIR    := $(PWD)/build
 TEST_DIR     := $(PWD)/test
@@ -18,6 +20,12 @@ all: test examples
 
 .PHONY: test
 test: $(TEST_CASES)
+
+.PHONY: fuzzytest
+fuzzytest: $(BUILD_DIR)
+	$(AFLCC) $(CFLAGS) $(TEST_DIR)/test.c -o $(BUILD_DIR)/afl-test
+	mkdir -p $(BUILD_DIR)/findings
+	$(AFLFUZZ) -i $(TEST_DIR)/afl-cases -o $(BUILD_DIR)/findings -- $(BUILD_DIR)/afl-test @@
 
 .PHONY: examples
 examples: $(BUILD_DIR) $(EXAMPLE_PROGRAMS)
